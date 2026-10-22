@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>???</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0a0c14;
+            --bg-card: #121624;
+            --accent-gold: #e2b041;
+            --border-color: #23273c;
+            --text-light: #f1f5f9;
+            --text-dim: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-light);
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header-container {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: var(--accent-gold);
+            letter-spacing: 6px;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        .btn-copy {
+            background: var(--accent-gold);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .btn-copy:active {
+            transform: scale(0.95);
+        }
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 12px;
+        }
+
+        .symbol-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .symbol-card:hover {
+            border-color: var(--accent-gold);
+        }
+
+        .symbol-preview {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .symbol-preview svg {
+            width: 36px;
+            height: 36px;
+            stroke: var(--accent-gold);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .symbol-char {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <h1>???</h1>
+        <button class="btn-copy" onclick="copyPageLink()">Copiar Link da Página</button>
+    </div>
+
+    <div class="symbol-grid" id="dictionaryGrid"></div>
+
+    <script>
+        const symbolMap = {
+            'a': '<path d="M12 2l10 20H2z"/>',
+            'b': '<circle cx="12" cy="12" r="10"/><path d="M12 2v20"/>',
+            'c': '<path d="M18 6L6 18M6 6l12 18"/>',
+            'd': '<path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10V2z"/>',
+            'e': '<path d="M5 4h14M5 12h10M5 20h14M5 4v16"/>',
+            'f': '<path d="M4 4h16v16H4z"/><path d="M4 12h16"/>',
+            'g': '<path d="M12 2l10 10-10 10L2 12z"/>',
+            'h': '<path d="M12 2v20m-10-10h20"/>',
+            'i': '<circle cx="12" cy="12" r="4"/><path d="M12 2v4m0 12v4"/>',
+            'j': '<path d="M6 4h12l-6 16z"/>',
+            'k': '<path d="M4 20L12 4l8 16H4z"/>',
+            'l': '<path d="M12 2l8 18H4z"/>',
+            'm': '<path d="M2 22L12 2l10 20H2z"/>',
+            'n': '<path d="M4 2h16v20H4z"/>',
+            'o': '<polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5"/>',
+            'p': '<path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/>',
+            'q': '<path d="M12 2v20M2 12h20M7 7l10 10M17 7L7 17"/>',
+            'r': '<path d="M6 6h12v12H6z"/><circle cx="12" cy="12" r="3"/>',
+            's': '<path d="M2 12c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10"/>',
+            't': '<path d="M12 2a8 8 0 0 0-8 8c0 5 8 12 8 12s8-7 8-12a8 8 0 0 0-8-8z"/>',
+            'u': '<path d="M3 6h18M3 12h18M3 18h18"/>',
+            'v': '<path d="M12 2l9 5v10l-9 5-9-5V7z"/>',
+            'w': '<circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/>',
+            'x': '<path d="M4 12a8 8 0 0 1 16 0M12 4v16"/>',
+            'y': '<path d="M2 16l10-12 10 12H2z"/>',
+            'z': '<path d="M12 2l4 6 6 4-6 4-4 6-4-6-6-4 6-4z"/>',
+            '0': '<ellipse cx="12" cy="12" rx="6" ry="10"/>',
+            '1': '<path d="M8 10l4-6v16"/>',
+            '2': '<path d="M4 8a4 4 0 0 1 8 0c0 4-8 8-8 12h12"/>',
+            '3': '<path d="M4 6h12L8 12l8 6H4"/>',
+            '4': '<path d="M12 2L4 14h16M12 14v8"/>',
+            '5': '<path d="M16 4H6v8h8a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6"/>',
+            '6': '<circle cx="12" cy="14" r="6"/><path d="M18 10V6a6 6 0 0 0-12 0"/>',
+            '7': '<path d="M4 4h16L10 20"/>',
+            '8': '<circle cx="12" cy="7" r="5"/><circle cx="12" cy="17" r="5"/>',
+            '9': '<circle cx="12" cy="10" r="6"/><path d="M6 14l-2 6"/>'
+        };
+
+        const grid = document.getElementById('dictionaryGrid');
+        for (const [char, path] of Object.entries(symbolMap)) {
+            const card = document.createElement('div');
+            card.className = 'symbol-card';
+            card.innerHTML = `
+                <div class="symbol-preview">
+                    <svg viewBox="0 0 24 24">${path}</svg>
+                </div>
+                <div class="symbol-char">${char}</div>
+            `;
+            grid.appendChild(card);
+        }
+
+        function copyPageLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Link copiado com sucesso!');
+            }).catch(() => {
+                prompt('Copie o link abaixo:', window.location.href);
+            });
+        }
+    </script>
+</body>
+</html>
